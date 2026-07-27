@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if word is none %}
+  <div class="empty-state">
+    <p>まだ単語が登録されていません</p>
+    <a href="{{ url_for('words.new_word') }}" class="btn btn--primary">単語を登録する</a>
+  </div>
+
+{% else %}
+  <div class="card">
+    <div class="card__word">{{ word.english }}</div>
+
+    <div id="card-back" class="hidden">
+      <div class="card__meaning">{{ word.meaning }}</div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button id="reveal-btn" class="btn btn--ghost">タップして答えを見る</button>
+  </div>
+
+  <div id="answer-buttons" class="hidden">
+    <div class="btn-group">
+      <form action="{{ url_for('quiz.score') }}" method="post">
+        <input type="hidden" name="word_id" value="{{ word.id }}">
+        <input type="hidden" name="word_english" value="{{ word.english }}">
+        <input type="hidden" name="result" value="correct">
+        <button type="submit" class="btn btn--correct">正解 ○</button>
+      </form>
+
+      <form action="{{ url_for('quiz.score') }}" method="post">
+        <input type="hidden" name="word_id" value="{{ word.id }}">
+        <input type="hidden" name="word_english" value="{{ word.english }}">
+        <input type="hidden" name="result" value="wrong">
+        <button type="submit" class="btn btn--wrong">不正解 ×</button>
+      </form>
+
+      {% if settings.mastery_mode == 'manual' %}
+      <form action="{{ url_for('quiz.master') }}" method="post">
+        <input type="hidden" name="word_id" value="{{ word.id }}">
+        <input type="hidden" name="word_english" value="{{ word.english }}">
+        <button type="submit" class="btn btn--master">覚えた ✓</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

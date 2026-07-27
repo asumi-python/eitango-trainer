@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>設定</h1>
+
+<form method="post">
+  <div class="form-group">
+    <label>「覚えた」の判定方法</label>
+    <div class="radio-group">
+      <label class="radio-label">
+        <input type="radio" name="mastery_mode" value="manual"
+               {{ 'checked' if settings.mastery_mode == 'manual' else '' }}
+               onchange="document.getElementById('streak-section').style.display='none'">
+        手動（「覚えた」ボタンで除外する）
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="mastery_mode" value="auto"
+               {{ 'checked' if settings.mastery_mode == 'auto' else '' }}
+               onchange="document.getElementById('streak-section').style.display='flex'">
+        自動（連続正解で自動除外する）
+      </label>
+    </div>
+  </div>
+
+  <div id="streak-section" class="form-group streak-inline"
+       style="display: {{ 'flex' if settings.mastery_mode == 'auto' else 'none' }}">
+    <span>連続正解</span>
+    <input type="number" name="streak_target" value="{{ settings.streak_target }}" min="1" max="20">
+    <span>回で除外</span>
+  </div>
+
+  <button type="submit" class="btn btn--primary">保存する</button>
+</form>
+{% endblock %}

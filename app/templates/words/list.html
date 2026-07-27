@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>登録済み単語 <span class="text-muted" style="font-size:1rem; font-weight:400;">（{{ words|length }}件）</span></h1>
+
+{% if words %}
+  <table class="word-table">
+    <thead>
+      <tr>
+        <th>英単語</th>
+        <th>意味</th>
+        <th>連続正解</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for w in words %}
+      <tr>
+        <td>{{ w.english }}</td>
+        <td class="text-muted">{{ w.meaning }}</td>
+        <td class="text-muted">{{ w.streak }}</td>
+        <td>
+          <form action="{{ url_for('words.delete_word', word_id=w.id) }}" method="post"
+                onsubmit="return confirm('「{{ w.english }}」を削除しますか？')">
+            <input type="hidden" name="english" value="{{ w.english }}">
+            <button type="submit" class="btn btn--danger btn--sm">削除</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <div class="empty-state">
+    <p>まだ単語が登録されていません</p>
+    <a href="{{ url_for('words.new_word') }}" class="btn btn--primary">単語を登録する</a>
+  </div>
+{% endif %}
+{% endblock %}

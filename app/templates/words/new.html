@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>単語を登録する</h1>
+
+<form method="post">
+  <div class="form-group">
+    <label for="english">英単語</label>
+    <input type="text" id="english" name="english" placeholder="例: abandon" required autofocus>
+  </div>
+  <div class="form-group">
+    <label for="meaning">意味</label>
+    <input type="text" id="meaning" name="meaning" placeholder="例: 捨てる、断念する" required>
+  </div>
+  <button type="submit" class="btn btn--primary">登録する</button>
+</form>
+{% endblock %}
