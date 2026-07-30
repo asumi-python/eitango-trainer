@@ -2,47 +2,40 @@
 
 {% block content %}
 {% if word is none %}
-  <div class="empty-state">
+  <div id="quiz-area" class="empty-state">
     <p>まだ単語が登録されていません</p>
     <a href="{{ url_for('words.new_word') }}" class="btn btn--primary">単語を登録する</a>
   </div>
 
 {% else %}
-  <div class="card">
-    <div class="card__word">{{ word.english }}</div>
-
-    <div id="card-back" class="hidden">
-      <div class="card__meaning">{{ word.meaning }}</div>
+  <div id="quiz-area">
+    <div class="card" id="quiz-card">
+      <div class="card__word" id="quiz-word">{{ word.english }}</div>
+      <div id="card-back" class="hidden">
+        <div class="card__meaning" id="quiz-meaning">{{ word.meaning }}</div>
+      </div>
     </div>
-  </div>
 
-  <div class="btn-group">
-    <button id="reveal-btn" class="btn btn--ghost">タップして答えを見る</button>
-  </div>
+    <div id="reveal-section" class="btn-group">
+      <button id="reveal-btn" class="btn btn--ghost">タップして答えを見る</button>
+    </div>
 
-  <div id="answer-buttons" class="hidden">
-    <div class="btn-group">
-      <form action="{{ url_for('quiz.score') }}" method="post">
-        <input type="hidden" name="word_id" value="{{ word.id }}">
-        <input type="hidden" name="word_english" value="{{ word.english }}">
-        <input type="hidden" name="result" value="correct">
-        <button type="submit" class="btn btn--correct">正解 ○</button>
-      </form>
+    <div id="answer-buttons" class="hidden">
+      <div class="btn-group">
+        <button class="btn btn--correct score-btn"
+                data-word-id="{{ word.id }}"
+                data-word-english="{{ word.english }}"
+                data-result="correct">正解 ○</button>
 
-      <form action="{{ url_for('quiz.score') }}" method="post">
-        <input type="hidden" name="word_id" value="{{ word.id }}">
-        <input type="hidden" name="word_english" value="{{ word.english }}">
-        <input type="hidden" name="result" value="wrong">
-        <button type="submit" class="btn btn--wrong">不正解 ×</button>
-      </form>
+        <button class="btn btn--wrong score-btn"
+                data-word-id="{{ word.id }}"
+                data-word-english="{{ word.english }}"
+                data-result="wrong">不正解 ×</button>
 
-      {% if settings.mastery_mode == 'manual' %}
-      <form action="{{ url_for('quiz.master') }}" method="post">
-        <input type="hidden" name="word_id" value="{{ word.id }}">
-        <input type="hidden" name="word_english" value="{{ word.english }}">
-        <button type="submit" class="btn btn--master">覚えた ✓</button>
-      </form>
-      {% endif %}
+        <button class="btn btn--master master-btn{% if settings.mastery_mode != 'manual' %} hidden{% endif %}"
+                data-word-id="{{ word.id }}"
+                data-word-english="{{ word.english }}">覚えた ✓</button>
+      </div>
     </div>
   </div>
 {% endif %}

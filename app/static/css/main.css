@@ -111,11 +111,12 @@ main { padding: 2rem 1rem; max-width: 600px; margin: 0 auto; }
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  transition: opacity 0.15s, transform 0.12s, box-shadow 0.15s;
 }
 
-.btn:active { transform: scale(0.97); }
-.btn:hover  { opacity: 0.88; }
+.btn:hover:not(:disabled)  { opacity: 0.88; box-shadow: 0 4px 14px rgba(0,0,0,0.35); transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: scale(0.95); box-shadow: none; opacity: 1; }
+.btn:disabled, .btn--loading { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
 .btn--ghost {
   background: var(--bg-surface);
@@ -225,3 +226,33 @@ h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; }
 /* ── Utility ── */
 .hidden { display: none !important; }
 .text-muted { color: var(--muted); }
+
+/* ── Quiz card transitions ── */
+#quiz-card {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.card--exit  { opacity: 0; transform: scale(0.96); }
+.card--enter { opacity: 0; transform: scale(1.03); }
+
+/* ── Toast notification ── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.75rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--correct);
+  color: var(--correct);
+  padding: 0.7rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+}
+.toast--show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
